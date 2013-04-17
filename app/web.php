@@ -433,6 +433,7 @@ $app->get('/webench', function (Request $request) use ($app) {
 //shows search result;
 
 $app->match('/searching', function (Request $request) use ($app) {
+                        
 			$app['session']->setFlash('success', null);
 			$app['session']->setFlash('error', null);           
                        
@@ -454,7 +455,7 @@ $app->match('/searching', function (Request $request) use ($app) {
                         else
                             $app['session']->setFlash('error', 'Aucune article trouv&eacute;e!!');
                     }
-
+                    
                     return $app['twig']->render('/../views/template/search.twig', array(
                                 'page' => 'searching',
                                 'articles' => $article_tags,
@@ -584,8 +585,8 @@ $app->match('/liste', function (Request $request) use ($app) {
 				return $app->redirect($app['url_generator']->generate('admin'));
 			}
                     $articleResult = ArticleQuery::create()
-									->orderByDate('DESC')
-									->find();
+                                    ->orderByDate('DESC')
+                                    ->find();
 
                     $nb_result = count($articleResult);
 
@@ -604,8 +605,15 @@ $app->match('/liste', function (Request $request) use ($app) {
 ->bind('liste');
 
 $app->match('/rss', function (Request $request) use ($app){
-    
-
+        header('Content-Type: text/xml');
+        $articles = ArticleQuery::create()
+        ->filterByDate(new DateTime(), '<=')
+        ->orderByDate('DESC')
+        ->find();
+        return $app['twig']->render('/../views/template/rss.twig', array(
+                'page' => 'rss',
+                'articles' => $articles
+            ));
  })
 ->bind('rss');
  

@@ -1,0 +1,18 @@
+
+
+
+<rss version="2.0">  
+<channel>  
+<title>SemioLabs</title>  
+<description> Nos articles publiées </description>  
+<link>http://localhost/semiolabs/web</link>
+{% for article in articles %}
+                    <item>
+                        <title>{{ article.titre }}  {{ article.date|date("d/m/Y") }}</title>
+                        <description>  {{ article.texte|truncate(2) }} </description>
+                        <link>http://localhost/semiolabs/web/article/{{ article.id }}</link>
+                        <pubDate> {{ article.date|date("m/d/Y") }} </pubDate>
+                    </item>
+{% endfor %}
+</channel>  
+
