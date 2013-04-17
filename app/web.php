@@ -367,10 +367,14 @@ $app->get('/article/{item}', function ($item) use ($app) {
 			$app['session']->setFlash('error', null);           
 
                     try {
-
-                        //Find the article to show 
                         $article = ArticleQuery::create()
                                 ->findOneById($item);
+                         $nb_vue = $article->getNbVue();
+                        //Find the article to show 
+                             ArticleQuery::create()
+                                ->findOneById($item)
+                                ->setNbVue($nb_vue+1)
+                                ->save();
                         //find tags 
                         $tags = ArticleQuery::create()
                                 ->setDistinct("tags")
@@ -599,7 +603,103 @@ $app->match('/liste', function (Request $request) use ($app) {
                 })
 ->bind('liste');
 
+$app->match('/rss', function (Request $request) use ($app){
+    
+// On modifie l'entête du document pour dire que c'est du xml
+header("Content-type: application/xml");  
+ 
+//Nombre de flus rss à afficher
+$nombre_flux=10;
+//Nombre de caractères à afficher pour les descriptions avant d'être tronquées par des ...
+$max_caracteres=150;
 
+$rewrite=1;
+
+//Fonction pour récupérer l'url principale du site
+function url_actuelle()
+{
+return "http://" . $_SERVER["SERVER_NAME"];
+}
+$url = (url_actuelle());
+ 
+//Fonction pour re écrire les url. A modifier ou à adapter selon vos besoins
+function OptimiseUrl($chaine)
+{    
+$chaine=strtolower($chaine);
+ 
+$accents = Array("/é/", "/è/", "/ê/","/ë/", "/ç/", "/à/", "/â/","/á/","/ä/","/ã/","/å/",
+ "/î/", "/ï/", "/í/", "/ì/", "/ù/", "/ô/", "/ò/", "/ó/", "/ö/");
+$sans = Array("e", "e", "e", "e", "c", "a", "a","a", "a","a", "a", "i", "i", "i", "i",
+ "u", "o", "o", "o", "o");
+ 
+$chaine = preg_replace($accents, $sans,$chaine);  
+$chaine = preg_replace('#[^A-Za-z0-9]#','-',$chaine);
+ 
+// Remplace les tirets multiples par un tiret unique
+$chaine = ereg_replace( "\-+", '-', $chaine );
+// Supprime le dernier caractère si c'est un tiret
+$chaine = rtrim( $chaine, '-' );
+ 
+while (strpos($chaine,'--') !== false) $chaine = str_replace('--','-',$chaine);
+ 
+return $chaine; 
+}
+ 
+//Entête du flux rss. A complèter selon vos besoins
+echo "<?xml version=\"1.0\" encoding=\"iso-8859-1\" ?>\n
+<rss version=\"2.0\">\n
+<channel>\n
+<title>Semiolabs</title>\n
+<link>$url</link>\n
+<description>Description du site ou du flux rss</description>\n
+<language>fr</language>\n\n";
+ 
+//Connexion à la base de données
+
+  $articles = ArticleQuery::create()
+                                ->filterByDate(new DateTime(), '<=')
+                                ->orderByDate('DESC')
+                                ->setLimit('3')
+                                ->find();
+ 
+  
+while($articles)
+{
+//On affiche les flux
+echo '<item>
+<title>'.$affiche["$titre"].'</title>';
+//Affichage du titre sans url rewriting
+if($rewrite==0){
+echo '<link>'.$url.'/'.$nom_de_la_page.'?id='.$affiche["$identifiant"].'</link>';}
+//Affichage du titre avec url rewriting- Partie à modifier/complèter selon votre propre
+
+else 
+{
+echo '<link>'.$url.'/'.OptimiseUrl($affiche["$titre"]).'-'.$affiche["$identifiant"].'
+.php</link>';
+}
+//On tronque la description
+if (strlen($affiche["$description"])>$max_caracteres)
+{    
+//Séléction du maximum de caractères
+$tronque_description = substr($affiche["$description"], 0, $max_caracteres);
+//Récupération de la position du dernier espace (afin déviter de tronquer un mot)
+$position_espace = strrpos($tronque_description, " ");    
+$tronque_description = substr($tronque_description, 0, $position_espace);    
+// Ajout des "..."
+$tronque_description = $tronque_description."...";
+}
+echo '<description>'.$tronque_description.'</description>
+</item>';
+}
+ 
+// Fermeture de la connexion à la base de données
+mysql_close();
+//On ferme le flux rss
+echo "</channel>\n</rss>";
+
+ })
+->bind('rss');
 
 //other pages code
 $app->get('/articles/{action}/{item}', function ($action, $item) use ($app) {
