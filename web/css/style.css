@@ -1191,8 +1191,8 @@ ul#navigation .write a      {
 ul#navigation .liste a      {
     background-image: url(/semiolabs/web/images/list.png);
 }
-ul#navigation .rssfeed a   {
-    background-image: url(/semiolabs/web/images/rss.png);
+ul#navigation .mostview a   {
+    background-image: url(/semiolabs/web/images/mostview.png);
 }
 
 
