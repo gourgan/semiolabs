@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <link rel="shortcut icon" href="favicon.ico">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}
+        <title>Semio labs</title>
+    {% endblock %}
+    {% block header_js %}
+    {% endblock %}
+    {% block css %}
+
+        <link href="/semiolabs/web/css/style.css" rel="stylesheet">
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+        
+        
+
+    {% endblock %}
+
+
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+
+  {% block menu %}   
+       <div class="navbar navbar-inverse nav">
+            <div class="navbar-inner">
+                <div class="container">
+                   
+                    <a class="brand" href="{{ path('cms',   { name: 'home'}) }}">semio<span>.labs</span> </a>
+
+                    <div class="nav-collapse collapse">
+                      <ul class="nav">
+                          <!-- menu avec sous menu   -->
+                          <li class="dropdown"><a  class="dropdown-toggle" data-toggle="dropdown">Projets</a></li>
+                          <li><a class="dropdown-toggle2" data-toggle="dropdown"> L'agence </a></li>
+                          <li><a {% if page=='Contact' %} id="active"  {% endif %} href="{{ path('cms',   {name: 'contact'}) }}"> Contact </a></li>
+                          <li><a {% if page=='webench' %} id="active"  {% endif %}  href="{{ path('cms',   {name: 'webench'}) }}"> We bench  </a></li>
+                          <li><a {% if page=='searching' %} id="active"   {% endif %}  class="lien-search" href="#"> <i  id="icon-search" class="icon-search icon-white"></i>  </a></li>
+                          <li><form  id="searchForm" name="searchForm" action="{{ path('cms',   {name: 'searching'}) }}" method="POST"><input class="search" id="search" name="tags" type="text" placeholder="search with tags"/></form></li>
+                      </ul>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+       <div class="projetcts_sousmenu">
+            <div class="content">
+               <div class="content-article"> 
+                   <img src="images/sousmenu_image2.png"/>
+               <h3>Intelligence collective</h3>
+                   <p>Systéme de veille professionel</p>
+               </div>
+               <div class="content-article2"> 
+                   <img src="images/sousmenu_image1.png"/>
+               <h3>Extranet</h3>
+                   <p>Outil de gestion de projet interne</p>
+               </div>
+                <div class="clear"></div>
+                <img  class="fleche" src="images/sousmenu_fleche.png"/>
+               
+             
+                
+            </div>   
+                         
+        </div>
+        
+        <div class="projetcts_sousmenu2">
+            <div class="content2">
+                            <div class="logo-semiodesign">
+                    <a href="http://www.semiodesign.com"><img alt="Semio Design" src="images/logo-semiodesign.png"></a>
+                </div>
+                <div class="vcard">
+                    <span class="fn org">Semio Design</span>
+                    <p class="adr">
+                        <span class="street-address">6 rue Gobert</span><br>
+                        <span class="postal-code">75011</span> <span class="locality">Paris</span><br>
+                        <span class="tel"><span class="value">+33 1 44 93 00 93</span></span><br>
+                        <a href="mailto:contact@semiodesign.com" class="email">contact@semiodesign.com</a>
+                    </p>
+                </div>
+                <div class="description">
+                    <p>
+                        Semio Design est une agence web créée à Paris en 2003 et <br>
+                        rattachée depuis septembre 2011 à l’agence <a href="http://www.agencepoupeesrusses.com">Les Poupées Russes</a>. <br>
+                        Semio Design intervient principalement dans l’univers <br>
+                        du luxe et de la beauté pour accompagner les marques <br>
+                        dans la mise en place de leur communication digitale.
+                    </p>
+                </div>
+                
+                <div class="clear"></div>
+                <img  class="fleche2" src="images/sousmenu_fleche.png"/>
+	      </div>
+                         
+        </div>
+  {% endblock %}
+        
+  {% block content %}{% endblock %}
+
+        {% block footer %}
+
+        {% endblock %}
+    </div>
+    {% block footer_js %}
+        <script src="/semiolabs/web/js/jquery.js"></script>
+        <script src="/semiolabs/web/js/script.js"></script>
+        <script src="/semiolabs/web/js/jquery.rte.js" ></script>
+        <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    {% endblock %}
+
+</body>
+</html>

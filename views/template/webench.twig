@@ -1,0 +1,43 @@
+{%extends "/layout/base.twig"%}
+
+{%block css%}
+{{parent()}}
+
+{%endblock%}
+{%block content%}
+
+     <div id="wrap" class="wrap">
+		{% for article in articles %}
+         <div id="container" class="clearfix" style="width:900px;margin:0 auto;">
+	  
+			<div class="box photo col3">
+			  <a href="/semiolabs/web/article/{{ article.id }}" title="{{ article.titre|e }}">
+			  <img src="{{ article.media }}" alt="{{ article.titre|e }}" /></a>
+			</div>
+	  
+		{% endfor %}
+ 
+		</div>
+  
+     </div>
+{% endblock %}
+{% block footer_js %}
+{{parent()}}
+<script src="/semiolabs/web/js/jquery.masonry.min.js"></script>
+
+ <script>
+  $(function(){
+
+    var $container = $('#container');
+  
+    $container.imagesLoaded( function(){
+      $container.masonry({
+        itemSelector : '.box'
+      });
+    });
+  
+  });
+</script>
+{% endblock %}
+
+

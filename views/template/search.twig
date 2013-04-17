@@ -1,0 +1,72 @@
+{# empty Twig template #}
+{%extends "/layout/base.twig"%}
+
+{%block css%}
+{{parent()}}
+
+{%endblock%}
+{%block content%}
+
+     <div id="wrap" class="wrap">
+         
+         <div class="content">
+             {% for article in articles %}
+            <div class="article">
+                <div class="article-content">
+                    <div class="title">
+                        <span class="icon-article"><img src="/semiolabs/web/images/{{ article.Type.Libelle }}.png" alt="type" title="type" /> </span>
+                        <span class="tag"> {{ article.Tags }}</span>   <input type="hidden" id="tags" value="{{ searched }}" />
+                        <h2><a href="/semiolabs/web/article/{{ article.id }}">{{ article.titre|e }} </a></h2>
+                    </div>
+                   <div class="info-date">     
+                    <div class="separator-small"></div>
+                    <h4> {{ article.date|date("d F Y", "Europe/Paris")}}</h4>
+                   </div>
+                   <p class="article-body">
+                       {{ article.texte| raw }}
+                   </p>
+                </div>
+                <div class="separator-long"></div>
+            </div>
+             {%endfor%}
+          </div>
+          <div id="loadmoreajaxloader" style="display:none;width:300px;margin:0 auto;"><img src="/semiolabs/web/images/loader.gif" alt="loader" /><span>wxxxxxxxxxxxxxxxx</span></div>
+
+     </div>
+
+
+ {% block footer_js %}
+{{parent()}}
+ <script>
+        var nb=3;
+	var tag = $('#tags').val();
+    $(window).scroll(function()
+    {
+        
+        if($(window).scrollTop() == $(document).height() - $(window).height())
+        {   
+           $('div#loadmoreajaxloader').show();
+
+            $.ajax({
+            url: "/semiolabs/web/ajax",
+            type:'POST',
+            data: { nmb: nb, tags: tag},
+            success: function(html)
+            {
+                if(html)
+                {
+                    $(".content").append(html);
+                    $('div#loadmoreajaxloader').hide();
+                }else
+                {
+                    $('div#loadmoreajaxloader').html('<center>No more posts to show.</center>');
+                }
+            }
+            });
+          nb+=3;
+        }
+    });
+</script>
+    {% endblock %}
+{% endblock %}
+

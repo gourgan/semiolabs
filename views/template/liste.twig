@@ -1,0 +1,50 @@
+
+{%extends "/layout/base.twig"%}
+
+{%block css%}
+{{parent()}}
+{%include "/layout/menu.twig"%}
+{%endblock%}
+{%block content%}
+  
+ 
+
+     <div id="wrap" class="wrap">
+         
+         <div class="content">
+            <div class="article">
+                <div class="article-content">
+{% if articleResult is not null %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Titre</th>
+                        <th>Type</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+
+
+                {% for article in articleResult %}
+                    <tr>
+                        <td>{{ article.id|e }}</td>
+                        <td>{{ article.titre|e }}</td>
+                        <td>{{ article.type.Libelle|e }}</td>
+                        <td><a href="articles/modify/{{ article.id|e }}" class="lien-btn"><img src="../web/images/modifier.png" title="modifier l'article" alt="modifier"/></a></td>
+                        <td><a href="articles/remove/{{ article.id|e }}" class="lien-btn"><img src="../web/images/supprimer.png" title="supprimer l'article" alt="supprimer"/></a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+  </div><!-- /container -->
+{% endblock %}
+

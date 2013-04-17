@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="semio" defaultIdMethod="native">
+    <table name="article" phpName="Article">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="titre" type="varchar" size="255" required="false" />
+        <column name="texte" type="varchar" size="255" required="false" />
+        <column name="date" type="date"  required="false" />
+        <column name="media" type="varchar" size="255" required="false" />
+        <column name="lien" type="varchar" size="255" required="false" />
+        <column name="type_id" type="integer" required="false" />
+        <column name="auteur_id" type="integer" required="false" />
+        <column name="tags" type="varchar" size="255"  />
+        <column name="nb_vue" type="integer" required="false"  />
+
+        <foreign-key foreignTable="type" onDelete="CASCADE">
+            <reference local="type_id" foreign="id"/>
+        </foreign-key>
+        
+        <foreign-key foreignTable="auteur" onDelete="CASCADE">
+            <reference local="auteur_id" foreign="id"/>
+        </foreign-key>
+        
+    </table>
+   
+    <table name="auteur" phpName="Auteur">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="login" type="varchar" size="255" required="false" />
+        <column name="password" type="varchar" size="255" required="false" />
+        <column name="description" type="varchar" size="255" required="false" />
+        <column name="image" type="varchar" size="255" required="false" />
+
+    </table>
+    <table name="type" phpName="Type">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="libelle" type="varchar" size="255" required="false" />
+        
+    </table>
+   
+    
+   
+</database>
+
+

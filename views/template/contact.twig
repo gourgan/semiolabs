@@ -1,0 +1,42 @@
+{%extends "/layout/base.twig"%}
+
+{%block css%}
+{{parent()}}
+
+{%endblock%}
+{%block content%}
+
+     <div id="wrap" class="wrap">
+         
+         <div class="content">
+             <div class="article">
+                 <form class="well span8" action="../web/contact" method="POST">
+  <div class="row">
+		<div class="span3">
+			<label>Nom</label>
+                        <input type="text"  name="nom" class="span3" placeholder="Your First Name">
+			<label>Prénom</label>
+                        <input type="text"  name="prenom" class="span3" placeholder="Your Last Name">
+			<label>Addresse Email</label>
+                        <input type="text" name="email" class="span3" placeholder="Your email address">
+			<label>Sujet
+			<select id="subject" name="subject" class="span3">
+				<option value="service">Nos Services</option>
+				<option value="suggestions">Suggestions</option>
+			</select>
+			</label>
+		</div>
+		<div class="span5">
+			<label>Message</label>
+			<textarea name="message" id="message" class="input-xlarge span5" rows="10"></textarea>
+		</div>
+          <div class="clear"></div>
+          <button type="submit" name="contact" class="btn btn-primary pull-right">Send</button>
+          <div class="clear"></div>	
+ <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://www.openstreetmap.org/export/embed.html?bbox=2.379291,48.854099,2.385782,48.857056&amp;layer=mapnik&amp;marker=48.85558,2.38254" style="border: 1px solid black;float:left"></iframe><br /></div>
+
+</form>  
+    </div>
+                 </div>
+</div>
+{%endblock%}

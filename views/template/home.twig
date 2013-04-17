@@ -1,0 +1,96 @@
+{%extends "/layout/base.twig"%}
+
+{%block css%}
+{{parent()}}
+
+{%endblock%}
+{%block content%}
+
+     <div id="wrap" class="wrap">
+		<div id="categoryTags">
+		<ul>
+			{% for tag in tags %}
+				
+					<li>
+					<a rel="tag" title="{{ tag.tags }}" href="search/{{ tag.tags }}">{{ tag.tags }}</a>
+					</li>
+			
+			{% endfor %}	
+		</ul>
+		</div>
+         <div class="content">
+             {% for article in articles %}
+            <div class="article">
+                <div class="article-content">
+                    <div class="title">
+                        <span class="icon-article"><img src="/semiolabs/web/images/{{ article.Type.Libelle }}.png" alt="type" title="type" /> </span>
+                        <h2><a href="/semiolabs/web/article/{{ article.id }}">{{ article.titre|e }} </a></h2>
+                    </div>
+                   <div class="info-date">     
+                    <div class="separator-small"></div>
+                    <h4> {{ article.date|date("d F Y", "Europe/Paris")}} </h4>
+                   </div>
+                   <div class="article-body">
+					   {% if article.Type.Libelle == 'Lien' %}
+							<a href="{{ article.lien }}" alt="{{ article.titre|e }}" class="lien" >{{ article.lien }}</a>
+					   {% endif %}
+                       {{ article.texte| raw }}
+					   {% if article.Type.Libelle == 'Photo' %}
+							<img src="{{ article.media }}" alt="{{ article.titre|e }}" />
+					   {% elseif article.Type.Libelle == 'Video' %}
+							<iframe src="http://www.youtube.com/embed/{{ article.media }}"	width="512" height="310"></iframe>
+					   {% endif %}
+                   </div>
+                </div>
+                <div class="separator-long"></div>
+                
+            </div>
+            {% else %}
+				<div class="message_article">
+					<span>Aucune article trouv&eacute;.</span>
+				</div>
+			{% endfor %}
+             
+</div>
+          <div id="loadmoreajaxloader">
+			<div class="message"><img src="/semiolabs/web/images/loader.gif" alt="loader" /><span>Chargement d'articles plus anciens </span></div>
+		  </div>
+     </div>
+
+
+{% endblock %}
+{% block footer_js %}
+{{parent()}}
+ <script>
+        var nb=3;
+	
+    $(window).scroll(function()
+    {
+        
+        if($(window).scrollTop() == $(document).height() - $(window).height())
+        {   
+           $('div#loadmoreajaxloader').show();
+
+            $.ajax({
+            url: "/semiolabs/web/ajax",
+            type:'POST',
+            data: { nmb: nb},
+            success: function(html)
+            {
+                if(html)
+                {
+                    $(".content").append(html);
+                    $('div#loadmoreajaxloader').hide();
+                }else
+                {
+                    $('div#loadmoreajaxloader').html('<center>No more posts to show.</center>');
+                }
+            }
+            });
+          nb+=3;
+        }
+    });
+</script>
+ {% endblock %}
+
+
