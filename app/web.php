@@ -109,6 +109,7 @@ $app->match('/gestion', function (Request $request) use ($app) {
                             $type = $data['Type'];
                             $article->setTitre($data['Titre']);
                             $article->setTexte($data['Texte']);
+                            $article->setAuteurId($app['session']->get('id'));
                             if($data["date-publication"]==""){
                                 $article->setDate(new DateTime());
                             }else{
@@ -159,7 +160,106 @@ $app->match('/gestion', function (Request $request) use ($app) {
                     );
                 })
         ->bind('gestion');
+                
+// author form description
+$app->match('/author', function (Request $request) use ($app) {
+					$app['session']->setFlash('success', null );
+					$app['session']->setFlash('error', null );
+					if (null == $app['session']->get('user')) {
+						return $app->redirect($app['url_generator']->generate('admin'));
+					}
+                    $type_media = array();
+                    $error = 0;
+                   
+                    $form = $app['form.factory']->createBuilder('form')
+                            
+                            ->add('Nom', 'text', array(
+                                'required' => true,
+                                'constraints' => array(
+                                    new Assert\NotBlank(array('message' => 'Veuillez saisir le nom de l\'auteur'))
+                                ), 'attr' => array(
+                                    'placeholder' => 'Nom de l\'auteur...',
+                                    'class' => 'input-block-level'
+                                )
+                            ))
+                            ->add('Description', 'text', array(
+                                'required' => true,
+                                'constraints' => array(
+                                    new Assert\NotBlank(array('message' => 'Veuillez saisir une description concernant  l\'auteur'))
+                                ), 'attr' => array(
+                                    'placeholder' => 'Texte...',
+                                    'class' => ' rte-zone input-block-level'
+                                    ))
+                            )
+                            ->add('Mediaimage', 'file', array(
+                                'label' => 'Votre image ',
+                                'required' => false,
+                                'constraints' => array(
+                                ),
+                                'attr' => array(
+                                    'help' => 'pas de spam !',
+                                    'class' => 'fileupload fileupload-new',
+                                    'style' => '',
+                                    'id' => 'media'
+                                )
+                            ))
+                            ->getForm();
 
+                    if ('POST' == $request->getMethod()) {
+                        $form->bind($request);
+                        $data = $form->getData();
+
+                        if ($form->isValid()) {
+
+                            $auteur = new Auteur();
+                            
+                            $auteur->setLogin($data['Nom']);
+                            $auteur->setDescription($data['Description']);
+                            //if image exist
+                            $files = $form['Mediaimage']->getData();
+                            if (!empty($files)) {
+
+                                $file = $form['Mediaimage']->getData();
+                                $extension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+
+                                $dir = '../web/uploads/';
+                                $MediaName = '/semiolabs/web/uploads/' . rand(1, 99999) . '.' . $extension;
+                                //check the extension (we just accept mp3);
+                                if ($extension == "jpg" || $extension == "png" || $extension == "gif") {
+                                    //if the file was succesfully uploaded
+
+                                    if ($file->move($dir, $MediaName)) {
+                                       $error = 0;
+                                    } else {
+                                        $error = 1;
+                                    }
+                                } else {
+                                    $error = 1;
+                                }
+                            
+                            $auteur->setImage($MediaName);
+                            
+                            if ($error != 1) {
+                                $auteur->save();
+				$app['session']->setFlash('success', 'Votre Auteur est ajout&eacute; avec succ&eacute;s');
+                            } else {
+                                $app['session']->setFlash('error', 'Erreur  existantes dans la page');
+                            }
+                        }
+                    }}
+                    return $app['twig']->render('/../views/template/gestion.twig', array(
+                                'form' => $form->createView(),
+                                'page' => 'author',
+                     )
+                    );
+                })
+        ->bind('author');
+
+                
+   
+                
+                
+                
 //shows admin login;               
 $app->match('/admin', function (Request $request) use ($app) {
 					$app['session']->setFlash('success', null);
@@ -192,10 +292,11 @@ $app->match('/admin', function (Request $request) use ($app) {
                         $auteur = AuteurQuery::create()
                                 ->filterByLogin($data['Login'])
                                 ->filterByPassword($data['Password'])
-                                ->find();
+                                ->findOne();
                         if ($form->isValid()) {
                             if (count($auteur)!=0) {
-								$app['session']->set('user', array('username' => $data['Login']));
+                               $app['session']->set('user', array('username' => $data['Login']));
+			       $app['session']->set('id',  $auteur->getId());
                                 return $app->redirect($app['url_generator']->generate('gestion'));
                             } else {
                                 $app['session']->setFlash('error', 'login ou mot de passe');
@@ -381,12 +482,15 @@ $app->get('/article/{item}', function ($item) use ($app) {
                                 ->orderByDate('DESC')
                                 ->setLimit('2')
                                 ->find();
-
+                        $auteur = AuteurQuery::create()
+                                ->filterById($article->getAuteurId())
+                                ->findOne();
 
                         return $app['twig']->render('/../views/template/article.twig', array(
                                     'page' => 'article',
                                     'article' => $article,
-                                    'tags' => $tags
+                                    'tags' => $tags,
+                                    'auteur'=>$auteur
                                 ));
 
 

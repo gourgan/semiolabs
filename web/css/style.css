@@ -1195,9 +1195,7 @@ ul#navigation .mostview a   {
     background-image: url(/semiolabs/web/images/mostview.png);
 }
 
-
-	
-        
+ 
 
 /**** Clearfix ****/
 .clearfix:before, .clearfix:after { content: ""; display: table; }
