@@ -67,7 +67,7 @@ $(document).ready(function() {
 
        $("#search").animate({
         width:"35%" ,
-        left:"+=15",
+        left:"+=80",
         display:"block",   
         opacity:"toggle"
 }, 1500 )

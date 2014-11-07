@@ -1,6 +1,4 @@
-labe/*!
- * Font Decima
- */
+
  
 @font-face {
     font-family: 'Decima';
@@ -125,6 +123,10 @@ table {
 .span5 {
     width: 470px;
     float: right;
+}
+#message{
+	height: 89px;
+    width: 727px;
 }
 [class*="span"] {
     float: left;
@@ -261,6 +263,25 @@ a.text-success:hover {
     margin-top:-33px;
     min-height: 20px;
     padding: 19px;
+	width: 800px;
+}
+.map{
+	display: table-cell; 
+	width: 515px;
+}
+.map iframe{
+	border: 4px solid #FFFFFF;
+    float: right;
+     -moz-box-shadow: 0 0 4px #E5E5E5 inset;
+    -webkit-box-shadow: 0 0 4px #E5E5E5 inset;
+     box-shadow: 0 0 4px #E5E5E5 inset;
+    -moz-border-radius: 4px 4px 4px 4px;
+	-webkitborder-radius: 4px 4px 4px 4px;
+	border-radius: 4px 4px 4px 4px;
+
+}
+.map iframe .leaflet-bottom{
+	display:none;
 }
 .btn {
     -moz-border-bottom-colors: none;
@@ -703,7 +724,7 @@ button, input, select, textarea {
 .fleche2 {
     cursor: pointer;
     float: right;
-    margin-top: 30px;
+    margin-top: 10px;
 }
 img {
     border: 0 none;
@@ -865,6 +886,7 @@ p {
     line-height:30px;
     display:table-row;
     width : 512px;
+	float:left;
 }
 .article .article-content p img , .article-body img , .article .article-content p embed ,.article-content p iframe , .article-body embed, .article-body iframe,.article p a img , .article p a  embed, .article p a  iframe{
      -moz-box-shadow: 0 0 4px #E5E5E5 inset;
@@ -999,14 +1021,14 @@ p {
 }
 
 .shares{
-    color: #525252;
+	color: #525252;
     display: table-row;
     font-family: "Decima";
     font-size: 14px;
     line-height: 30px;
-    width: 245px;
-    float:right;
-    margin-top:30px;
+    width: 235px;
+	float:right;
+	margin-top:30px;
 }
 .shares div ,.shares span {
 	float:left;
@@ -1041,6 +1063,9 @@ p {
 .poster img {
 	float:left;
 	margin:5px;
+	width:69px !important;
+	border:none;
+	box-shadow : none;
 }
 .poster h5{
 	float:left;
@@ -1150,6 +1175,10 @@ p {
 a img {
     border: medium none;
 }
+#active{
+	color:#FFFFFF;
+	font-weight:bold;
+}
 ul#navigation {
     position: fixed;
     margin: 0px;
@@ -1257,8 +1286,9 @@ div.preset-2 span:after {
 #wrapper span {
     left: 50%;
     position: absolute;
-    top: 94%;
+    top: 99%;
 }
+
 
 /**** Clearfix ****/
 .clearfix:before, .clearfix:after { content: ""; display: table; }

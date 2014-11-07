@@ -23,7 +23,9 @@
         <form class="formulaire" action="#" method="post" {{ form_enctype(form) }} novalidate>
                    
                     {{ form_widget(form) }}
-                    
+                    <div id="wrapper" class="preset-2">
+                            <span class="tooltip">Saisir une date pour planifier la publication de l'article (Date actuelle par d&eacute;faut)</span>
+                    </div>
                     <input type="submit" name="Ajouter" class="btn btn-large btn-primary" />
                </form>
  </div>

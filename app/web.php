@@ -168,7 +168,10 @@ $app->match('/author', function (Request $request) use ($app) {
 					if (null == $app['session']->get('user')) {
 						return $app->redirect($app['url_generator']->generate('admin'));
 					}
-                    $type_media = array();
+                   
+                   $auteur = AuteurQuery::create()
+                           ->findOneById($app['session']->get('id'));
+                                       
                     $error = 0;
                    
                     $form = $app['form.factory']->createBuilder('form')
@@ -179,7 +182,8 @@ $app->match('/author', function (Request $request) use ($app) {
                                     new Assert\NotBlank(array('message' => 'Veuillez saisir le nom de l\'auteur'))
                                 ), 'attr' => array(
                                     'placeholder' => 'Nom de l\'auteur...',
-                                    'class' => 'input-block-level'
+                                    'class' => 'input-block-level',
+                                    'value' => $auteur->getLogin()
                                 )
                             ))
                             ->add('Description', 'text', array(
@@ -188,7 +192,8 @@ $app->match('/author', function (Request $request) use ($app) {
                                     new Assert\NotBlank(array('message' => 'Veuillez saisir une description concernant  l\'auteur'))
                                 ), 'attr' => array(
                                     'placeholder' => 'Texte...',
-                                    'class' => ' rte-zone input-block-level'
+                                    'class' => ' rte-zone input-block-level',
+                                    'value' => $auteur->getDescription()
                                     ))
                             )
                             ->add('Mediaimage', 'file', array(
@@ -200,7 +205,8 @@ $app->match('/author', function (Request $request) use ($app) {
                                     'help' => 'pas de spam !',
                                     'class' => 'fileupload fileupload-new',
                                     'style' => '',
-                                    'id' => 'media'
+                                    'id' => 'media',
+                                    
                                 )
                             ))
                             ->getForm();
@@ -210,12 +216,8 @@ $app->match('/author', function (Request $request) use ($app) {
                         $data = $form->getData();
 
                         if ($form->isValid()) {
-
-                            $auteur = new Auteur();
-                            
-                            $auteur->setLogin($data['Nom']);
-                            $auteur->setDescription($data['Description']);
                             //if image exist
+                            
                             $files = $form['Mediaimage']->getData();
                             if (!empty($files)) {
 
@@ -237,17 +239,24 @@ $app->match('/author', function (Request $request) use ($app) {
                                     $error = 1;
                                 }
                             
-                            $auteur->setImage($MediaName);
+                            
+                            $auteur2 = AuteurQuery::create()
+                                    ->findOneById($app['session']->get('id'))
+                                    ->setLogin($data['Nom'])
+                                    ->setDescription($data['Description'])
+                                    ->setImage($MediaName);
+                                    
                             
                             if ($error != 1) {
-                                $auteur->save();
-				$app['session']->setFlash('success', 'Votre Auteur est ajout&eacute; avec succ&eacute;s');
-                            } else {
+                                $auteur2->save();
+				$app['session']->setFlash('success', 'Votre Auteur est modifi&eacute; avec succ&eacute;s');
+                                return $app->redirect($app['url_generator']->generate('gestion'));
+                                } else {
                                 $app['session']->setFlash('error', 'Erreur  existantes dans la page');
                             }
                         }
                     }}
-                    return $app['twig']->render('/../views/template/gestion.twig', array(
+                    return $app['twig']->render('/../views/template/author.twig', array(
                                 'form' => $form->createView(),
                                 'page' => 'author',
                      )
@@ -379,6 +388,14 @@ $app->match('/articles/modify/{item}', function (Request $request, $item) use ($
                             'value' => $article->getLien()
                         )
                     ))
+                      ->add('date-publication', 'text', array(
+                                'required' => false,
+                                'constraints' => array(
+                                ), 'attr' => array(
+                                    'class'=>'datepicker',
+                                    
+                                )
+                            ))
                     ->add('MediaOther', 'text', array(
                         'required' => false,
                         'constraints' => array(
@@ -414,7 +431,11 @@ $app->match('/articles/modify/{item}', function (Request $request, $item) use ($
                     $type = $data['Type'];
                     $article2->setTitre($data['Titre']);
                     $article2->setTexte($data['Texte']);
-                    $article2->setDate(new DateTime());
+                    if($data["date-publication"]==""){
+                                $article2->setDate(new DateTime());
+                            }else{
+                                $article2->setDate($data["date-publication"]);
+                            }
                     $article2->setLien($data['Lien']);
 
                     //if image exist

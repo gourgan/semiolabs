@@ -3,7 +3,6 @@
 
 {%block css%}
 {{parent()}}
-
 {%endblock%}
 {%block content%}
 {%include "/layout/menu.twig"%}
@@ -12,7 +11,7 @@
     <div class="content">
         {% if app.session.hasFlash('success') %}
         <div class="alert alert-block alert-success">
-            <h4> R&eacute;sultat de votre recherche </h4>
+           
                     {{ app.session.flash('success') | raw }}
         </div>
             {% elseif app.session.hasFlash('error') %}
@@ -24,11 +23,12 @@
         <form class="formulaire" action="#" method="post" {{ form_enctype(form) }} novalidate>
                    
                     {{ form_widget(form) }}
-                    
+                   
                     <input type="submit" name="Ajouter" class="btn btn-large btn-primary" />
                </form>
  </div>
     </div>
 
+	
 {% endblock %}
 

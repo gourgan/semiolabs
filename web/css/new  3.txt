@@ -1,4 +1,0 @@
-$mysql_host = "mysql4.000webhost.com";
-$mysql_database = "a6260555_webradi";
-$mysql_user = "a6260555_hicham";
-$mysql_password = "agadir1990";

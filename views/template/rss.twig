@@ -6,7 +6,7 @@
 {% for article in articles %}
                     <item>
                         <title>{{ article.titre }}  {{ article.date|date("d/m/Y") }}</title>
-                        <description>  {{ article.texte|truncate(2) }} </description>
+                        <description>  {{ article.texte }} </description>
                         <link>http://localhost/semiolabs/web/article/{{ article.id }}</link>
                         <pubDate> {{ article.date|date("m/d/Y") }} </pubDate>
                     </item>

@@ -12,7 +12,7 @@
 			{% for tag in tags %}
 				
 					<li>
-					<a rel="tag" title="{{ tag.tags }}" href="search/{{ tag.tags }}">{{ tag.tags }}</a>
+					<a rel="tag" title="{{ tag.tags }}" href="/semiolabs/web/search/{{ tag.tags }}">{{ tag.tags }}</a>
 					</li>
 			
 			{% endfor %}	
@@ -34,7 +34,7 @@
 					   {% if article.Type.Libelle == 'Lien' %}
 							<a href="{{ article.lien }}" alt="{{ article.titre|e }}" class="lien" >{{ article.lien }}</a>
 					   {% endif %}
-                       {{ article.texte| raw }}
+                       {{ article.texte[:1000] | raw }}...
 					   {% if article.Type.Libelle == 'Photo' %}
 							<img src="{{ article.media }}" alt="{{ article.titre|e }}" />
 					   {% elseif article.Type.Libelle == 'Video' %}
@@ -47,7 +47,7 @@
             </div>
             {% else %}
 				<div class="message_article">
-					<span>Aucune article trouv&eacute;.</span>
+					<span>Aucun article trouv&eacute;.</span>
 				</div>
 			{% endfor %}
              
@@ -66,8 +66,8 @@
 	
     $(window).scroll(function()
     {
-        
-        if($(window).scrollTop() == $(document).height() - $(window).height())
+        //alert(""+$(window).scrollTop()+"  "+(($(document).height()- $(window).height())- 10));
+        if($(window).scrollTop() >= ($(document).height() - $(window).height())- 10)
         {   
            $('div#loadmoreajaxloader').show();
 
